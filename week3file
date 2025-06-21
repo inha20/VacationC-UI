@@ -1,0 +1,72 @@
+using System;
+
+private void btnOutput08_Click(object sender, EventArgs e)
+{
+    bool result1 = (tbxInput1.Text == tbxInput2.Text);
+    bool result2 = tbxInput2.Text == tbxInput3.Text;
+    bool result3 = tbxInput3.Text == tbxInput1.Text;
+
+    if (result1 && result2) { lblResult.Text = "와 같다"}
+    else if (result1 == result2) { lblResult.Text = "Input1만 다를수도 있다"}
+    else if (result2 == result3) { lblResult.Text = "Input3만 다를수도 있다"}
+    else if (result3 == result1) { lblResult.Text = "Input2만 다를수도 있다"}
+    else { lblResult.Text = "셋 다 다르다" }
+}
+
+private void btnOutput07_Click(object sender, EventArgs e)
+{
+    var data1 = int.Parse(tbxInput1.Text);
+    var data2 = int.Parse(tbxInput2.Text);
+
+    string result;
+    if (data1 == data2) { result = "=="; }
+    else if (data1 > data2) { result = "1>2"; }
+    else { result = "1<2 or Error"; }
+    lblResult.Text = result;
+}
+
+private void btnOutput07_Click(object sender, EventArgs e)
+{
+    TextBox[] textBoxes;
+    textBoxes = new TextBox[5];
+
+    textBoxes[0] = tbxInput1;
+    textBoxes[1] = tbxInput2;
+    textBoxes[2] = tbxInput3;
+    textBoxes[3] = tbxInput4;
+    textBoxes[4] = tbxInput5;
+
+    int sum = 0;
+    for (int i = 0; i < textBoxes.Length; i++)
+    {
+        if ((textBoxes[i].Text != null) && (textBoxes[i].Text.Trim() != ""))
+        {
+            sum += int.Parse(textBoxes[i].Text);
+        }
+    }
+    lblResult.Text = "S:" + sum;
+}
+
+private void btnOutput11_Click(object sender, EventArgs e)
+{
+    TextBox[] textBoxes;
+    textBoxes = new TextBox[5];
+
+    textBoxes[0] = tbxInput1;
+    textBoxes[1] = tbxInput2;
+    textBoxes[2] = tbxInput3;
+    textBoxes[3] = tbxInput4;
+    textBoxes[4] = tbxInput5;
+
+    int sum = 0;
+    int logical = 0;
+    for (int i = 0; i < textBoxes.Length; i++)
+    {
+        if (false == string.IsNullOrEmpty(texrBoxes[i].Text))
+        {
+            sum += int.Parse(textBoxes[i].Text);
+            logical++;
+        }
+    }
+    lblResult.Text = "S/N:" + (sum / logical);
+}
