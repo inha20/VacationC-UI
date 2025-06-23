@@ -1,1 +1,108 @@
+using System;
+using System.Linq;
+using System.Windows.Forms;
 
+namespace Calculator
+{
+    public partial class Form1:Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            InitializeButtonEvents();
+        }
+
+        string[] numbers = {"0","1","2", "3","4", "5", "6", "7", "8", "9" };
+        string[] operators = { "+", "-", "/", "-" };
+        string num1 = "", num2 = "", op = "";
+        bool flag = true;
+
+        private void InitializeButtonEvents() 
+        {
+            foreach (Button btn in this.Controls.OfType<InitializeButtonEvents>())
+            {
+                if (numbers.Contains(btn.Text))
+                    btn.Click += CheckWhatNumber;
+                else if (operators.Contains(btn.text))
+                    btn.Click += CheckWhatOper;
+                else if (btn.text == "=")
+                    btn.Click += btnCal_Click;
+            }
+        }
+
+        private string Calculate(string oper, string fnum, string snum)
+        {
+            if (!flag) return "stop";
+
+            op = "";
+            int firstNum = int.Parse(fnum.Trim());
+            int secondNum = int.Parse(snum.Trim());
+            int result = oper switch
+            {
+                "+" => firstNum + secondNum,
+                "-" => firstNum - secondNum,
+                "*" => firstNum * secondNum,
+                "/" when secondNum == 0 => ErrorMessage(),
+                "/" => firstNum / secondNum,
+                _ => 0
+            };
+
+            lblExpression.Text = lblNumbers.Text + "=" + result;
+            lblNumbers.Text = result.ToString();
+            return result.ToString();
+        }
+
+        private string ErrorMessage()
+        {
+            lblExpression.Text = lblNumbers.Text;
+            lblNumbers.Text = "정의되지 않음";
+            MessageBox.Show("0으로 나눌 수 없습니다.")
+            flag = false;
+            return "stop";
+        }
+
+        private void CheckWhatOper(object sender, EventArgs e)
+        {
+            Button clickedButton = sender as Button();
+            if (clickedButton == null || !flag) return;
+
+            string oper = clickedButton.Text;
+
+            if (string.IsNullOrEmpty(op))
+            {
+                op = oper;
+                lblNumbers.Text += oper;
+            }
+            else if  (oper == "-" || Calculate(op, num1, num2) != "stop")
+            {
+                num1 = Calculate(op, num1, num2);
+                num2 = ""
+                op = oper;
+                lblNumbers.Text += oper;
+            }
+        }
+
+        private void CheckWhatNumber(object sender, EventArgs e)
+        {
+            Button clickedButton = sender as Button();
+            if (clickedButton == null || !flag) return;
+
+            string num = clickedButton.Text;
+
+            if (string.IsNullOrEmpty(op))
+                num1 += num;
+            else 
+                num2 += num;
+        }
+
+        private void btnCal_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(num1) && !string.IsNullOrEmpty(num2))
+            {
+                num1 = Calculate(op, num1, num2);
+                num2 = "";
+                op = "";
+            }
+        }
+    }
+}
