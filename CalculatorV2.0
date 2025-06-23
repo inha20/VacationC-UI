@@ -1,1 +1,195 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
+namespace Week03Homework
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        string[] number = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        string[] operate = new string[] { "+", "*", "/", "-" };
+        string num1 = "";
+        string num2 = "";
+        bool flag = true;
+        string op = "";
+
+        private string Calculate(string oper, string fnum, string snum)
+        {
+            if (flag == false) { return "stop";}
+            else
+            {
+                op = "";
+                int first_num = int.Parse(fnum.Trim());
+                int second_num = int.Parse(snum.Trim());
+                int result = 0;
+                switch (oper)
+                {
+                    case "+": result = first_num + second_num; break;
+                    case "-": result = first_num - second_num; break;
+                    case "*": result = first_num * second_num; break;
+                    case "/":
+                        if (second_num == 0)
+                        {
+                            lblExpression.Text = lblNumbers.Text;
+                            lblNumbers.Text = "정의되지 않음";
+                            MessageBox.Show("0으로 나눌 수 없습니다.");
+                            flag = false;
+                            return "stop";
+                        }
+                        else
+                        {
+                            result = first_num / second_num; break;
+                        }
+                }
+                lblExpression.Text = lblNumbers.Text + "=" + result.ToString();
+                lblNumbers.Text = result.ToString();
+                return result.ToString();
+
+            }
+        }
+        private void CheckWhatOper(string oper)
+        {
+            if (flag != false)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (oper == operate[i] && true == string.IsNullOrEmpty(op))
+                    {
+                        op = oper;
+                        lblNumbers.Text += oper;
+                    }
+                    else if (oper == operate[i] && false == string.IsNullOrEmpty(op))
+                    {
+                        if (oper == "-")
+                        {
+                            lblNumbers.Text += oper;
+                            
+                        }
+                        else
+                        {
+                            string result = Calculate(op, num1, num2);
+                            if (result == "stop")
+                            {
+                                op = "";
+                                num1 = "";
+                                num2 = "";
+                                flag = false;
+                                return;
+                            }
+                            num1 = result;
+                            num2 = "";
+                            op = oper;
+                            lblNumbers.Text += oper;
+                        }
+                    }
+                }
+            }
+        }
+        private void CheckWhatNumber(string num)
+        {
+            if (flag != false)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (num == number[i] && true == string.IsNullOrEmpty(op))
+                    {
+                        num1 += num;
+                        lblNumbers.Text += num;
+                    }
+                    else if (num == number[i] && false == string.IsNullOrEmpty(op))
+                    {
+                        num2 += num;
+                        lblNumbers.Text += num;
+                    }
+                }
+            }
+        }
+
+        private void btnNum9_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("9");
+        }
+
+        private void btnNum8_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("8");
+        }
+
+        private void btnNum7_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("7");
+        }
+        private void btnNum6_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("6");
+        }
+        private void btnNum5_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("5");
+        }
+        private void btnNum4_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("4");
+        }
+        private void btnNum3_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("3");
+        }
+        private void btnNum2_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("2");
+        }
+        private void btnNum1_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("1");
+        }
+        private void btnNum0_Click(object sender, EventArgs e)
+        {
+            CheckWhatNumber("0");
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            CheckWhatOper("+");
+        }
+
+        private void btnDiv_Click(object sender, EventArgs e)
+        {
+            CheckWhatOper("/");
+        }
+
+        private void btnMul_Click(object sender, EventArgs e)
+        {
+            CheckWhatOper("*");
+        }
+
+        private void btnSub_Click(object sender, EventArgs e)
+        {
+            if (false == string.IsNullOrEmpty(op))
+            {
+                num2 += "-";
+            }
+            CheckWhatOper("-");
+        }
+
+        private void btnCal_Click(object sender, EventArgs e)
+        {
+            if (false == string.IsNullOrEmpty(num1) && false == string.IsNullOrEmpty(num2))
+            {
+                num1 = Calculate(op, num1, num2);
+                num2 = "";
+                op = "";
+            }
+        }
+    }
+}
